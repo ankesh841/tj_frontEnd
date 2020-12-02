@@ -1,0 +1,1356 @@
+<div class="container">
+  <div class="display-4 mb-4 text-center" style="font-size: 3em">
+    <span style="text-decoration: underline"> Search</span>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field class="width_" appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          placeholder="First Name"
+          [(ngModel)]="firstName_search"
+          name="first"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field class="width_" appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          placeholder="First Name"
+          [(ngModel)]="lastName_search"
+          name="last"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field class="width_" appearance="outline">
+        <mat-label>Office File No.</mat-label>
+        <input
+          matInput
+          placeholder="Office Filie No."
+          [(ngModel)]="officeFile_search"
+          name="lastf"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- <div class="row">
+    <div class="col-md-4">
+      <mat-form-field appearance="outline" class="width_">
+        <mat-label>Select Title</mat-label>
+        <mat-select>
+          <mat-option>ankesh</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field appearance="outline" class="width_">
+        <mat-label>File Status</mat-label>
+        <mat-select>
+          <mat-option>ankesh</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field appearance="outline" class="width_">
+        <mat-label>Office</mat-label>
+        <mat-select>
+          <mat-option>ankesh</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div> -->
+
+  <div class="row mt-4">
+    <div class="col-md-7 ml-auto">
+      <mat-form-field class="width_" appearance="outline">
+        <mat-label>Search Anything</mat-label>
+        <input
+          matInput
+          placeholder="search anything"
+          [(ngModel)]="search_main"
+          name="lastdsff"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4 text-center">
+      <button
+        (click)="searchSubmit()"
+        mat-raised-button
+        color="primary"
+        style="width: 50%; height: 55px; font-size: 1.6em; font-weight: 350"
+      >
+        Search
+      </button>
+    </div>
+  </div>
+
+  <!-- <mat-form-field appearance="outline">
+    <mat-label>First Name</mat-label>
+    <input matInput placeholder="First Name" [(ngModel)]="firstName_search" name="first">
+</mat-form-field> -->
+
+  <!-- showing Result -->
+  <div *ngIf="showResult">
+    <mat-divider class="my-3"> </mat-divider>
+    <p class="display-4 text-center" style="font-size: 2.5em">Results</p>
+    <table class="shadow">
+      <tr>
+        <th>Select</th>
+        <th>Office File Id</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Gender</th>
+        <th>DOB</th>
+        <th>Address</th>
+      </tr>
+
+      <ng-container *ngFor="let item of searchData; let i = index">
+        <tr *ngFor="let it of item">
+          <td>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="showingOptions(it.objectID, showsOptionsAfterClicking)"
+            >
+              Select
+            </button>
+          </td>
+          <td>
+            {{ it.officeFileNo }}
+          </td>
+          <td>
+            {{ it.firstName }}
+          </td>
+          <td>
+            {{ it.lastName }}
+          </td>
+          <td>{{ it.whichGender }}</td>
+          <td>{{ it.clientDob }}</td>
+          <td>{{ it.addressOne }}</td>
+        </tr>
+      </ng-container>
+    </table>
+  </div>
+
+  <!-- select options-->
+  <ng-template
+    #showsOptionsAfterClicking
+    let-modal
+    form
+    class="modal-dialog-centered"
+  >
+    <div class="modal-header" style="background-color: #3f51b5; color: white">
+      <p
+        class="display-4 modal-title"
+        style="font-size: 2em"
+        id="modal-basic-title"
+      >
+        Select Options
+      </p>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <br />
+    <mat-progress-bar mode="indeterminate" *ngIf="showingOptionProgress">
+    </mat-progress-bar>
+    <br />
+
+    <div class="container text-center">
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4 col-sm-6 px-3 py-3">
+            <div class="card pb-4">
+              <div class="card-body">
+                <a href="javascript:void(0)">
+                  <img
+                    class="iconDefaultDimensions"
+                    src="../../assets/viewRecord.png"
+                    (click)="displayClientRecords(content)"
+                  />
+                </a>
+              </div>
+              View Record
+            </div>
+          </div>
+
+          <div class="col-md-4 col-sm-6 px-3 py-3">
+            <div class="card pb-4">
+              <div class="card-body">
+                <a [routerLink]="['/search']">
+                  <img
+                    class="iconDefaultDimensions"
+                    src="../../assets/upgrade.png"
+                  />
+                </a>
+              </div>
+
+              Update Record
+            </div>
+          </div>
+
+          <div class="col-md-4 col-sm-6 px-3 py-3">
+            <div class="card pb-4">
+              <div class="card-body">
+                <a
+                  href="javascript:void(0)"
+                  (click)="addNotesDialog(notesDialog)"
+                >
+                  <img
+                    class="iconDefaultDimensions"
+                    src="../../assets/notes.png"
+                  />
+                </a>
+              </div>
+              Notes
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 px-3 py-3">
+            <div class="card pb-4">
+              <div class="card-body">
+                <div class="img-upload">
+                  <label for="file-input">
+                    <a href="javascript:void(0)">
+                      <img
+                        style="height: 80px; width: 120px"
+                        src="../../assets/storage.png"
+                      />
+                    </a>
+                  </label>
+
+                  <input
+                    id="file-input"
+                    type="file"
+                    (change)="upload($event)"
+                  />
+                </div>
+                File: {{ uploadingFileNameDisplay }}
+              </div>
+              Upload File
+            </div>
+          </div>
+
+          <div class="col-md-6 col-sm-6 px-3 py-3 mt-3">
+            <div class="card pb-4">
+              <div class="card-body">
+                <a
+                  href="javascript:void(0)"
+                  (click)="openDownloadDialogBox(downloadDialogBox)"
+                >
+                  <img
+                    class="iconDefaultDimensions"
+                    src="../../assets/download.png"
+                  />
+                </a>
+              </div>
+              View or Download Documents
+              <br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="modal.close('Save click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+
+  <!--  -->
+
+  <!--
+
+   -->
+
+  <ng-template #downloadDialogBox let-modal>
+    <div class="modal-header" style="background-color: #3f51b5; color: white">
+      <p
+        class="display-4 modal-title"
+        style="font-size: 2em"
+        id="modal-basic-title"
+      >
+        View or Download Uploaded Documents
+      </p>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <br />
+    <mat-progress-bar mode="indeterminate" *ngIf="storedFileProgress">
+    </mat-progress-bar>
+    <br />
+
+    <div class="modal-body">
+      <div class="container">
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="row">
+              <div *ngFor="let item of storedFilesUrls" class="mx-auto pb-4">
+                <div class="card card-body px-4 py-4">
+                  <div class="col">
+                    <img
+                      src="{{ item.url }}"
+                      onError="this.onerror=null;this.src='../../assets/na.png';"
+                      style="height: 170px; width: 170px"
+                    />
+                    <br />
+
+                    <p style="width: 100%">{{ item.fileName }}</p>
+                    <br />
+                    <button
+                      mat-raised-button
+                      color="primary"
+                      (click)="downloadingFilesOnClick(item.url)"
+                    >
+                      Download
+                    </button>
+
+                    <!-- <a href="{{ item.url }}" download>Download Receipt</a> -->
+
+                    <!-- <a
+                      download="{{ item.fileName }}"
+                      rel="nofollow"
+                      href="{{ item.url }}"
+                    >
+                      {{ item.fileName }}
+                    </a> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="modal.close('Save click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+
+  <!--  -->
+
+  <ng-template let-modal form #notesDialog>
+    <div class="modal-header" style="background-color: #3f51b5; color: white">
+      <p
+        class="display-4 modal-title"
+        style="font-size: 2em"
+        id="modal-basic-title"
+      >
+        Adding Notes
+      </p>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="container card">
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-md-3">
+              <mat-form-field class="width_" appearance="outline">
+                <mat-label>Enter Subject</mat-label>
+                <input
+                  matInput
+                  placeholder="Subject"
+                  [(ngModel)]="subject"
+                  name="subject_"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-9">
+              <mat-form-field class="width_">
+                <mat-label>Notes</mat-label>
+                <textarea
+                  matInput
+                  placeholder="Write.."
+                  [(ngModel)]="notes"
+                  name="notes_name"
+                ></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="addingNotes()"
+            style="margin-left: 1.2em"
+          >
+            Notes
+          </button>
+        </div>
+
+        <div class="alert alert-danger mt-4" *ngIf="displayError">
+          {{ displayError }}
+        </div>
+      </div>
+
+      <br />
+      <mat-progress-bar
+        mode="query"
+        *ngIf="currentClientNotesArray && !progressBarDisplayNotes"
+      >
+      </mat-progress-bar>
+
+      <br />
+
+      <p
+        class="display-4 text-center"
+        style="margin-bottom: 1em; font-size: 2em"
+      >
+        All Notes:
+      </p>
+
+      <div class="card" *ngIf="currentClientNotesArray">
+        <div class="card-body">
+          <div
+            class="card border-dark mb-3"
+            *ngFor="let item of currentClientNotesArray; let i = index"
+          >
+            <div class="card-header display-4" style="font-size: 1.4em">
+              {{ item.subject }}
+            </div>
+
+            <div class="card-body text-dark">
+              <p class="card-text" style="font-size: 1.2em">
+                {{ item.notes }}
+              </p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted" style="font-size: 1.3em">{{
+                item.date
+              }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="modal.close('Save click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+
+  <!--  -->
+
+  <!-- result div -->
+  <ng-template #content let-modal form>
+    <div class="modal-header" style="background-color: #3f51b5; color: white">
+      <p
+        class="display-4 modal-title"
+        style="font-size: 2em"
+        id="modal-basic-title"
+      >
+        Displaying Record
+      </p>
+
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <br />
+    <mat-progress-bar *ngIf="clientRecordProgress" mode="indeterminate">
+    </mat-progress-bar>
+    <br />
+    <div class="modal-body" id="displayingClientID">
+      <!-- starting modal body for all the data -->
+
+      <form [formGroup]="registerForm">
+        <div class="card">
+          <div class="card-header text-white">Client</div>
+          <div class="card-body">
+            <!-- first row -->
+
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field appearance="outline" class="width_" require>
+                  <mat-label>Application Type</mat-label>
+                  <mat-select
+                    required
+                    [(ngModel)]="applicationType"
+                    formControlName="first"
+                    (selectionChange)="selectedApplicationType()"
+                  >
+                    <mat-option
+                      *ngFor="let item of applicationTypeArray"
+                      value="{{ item }}"
+                      >{{ item }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field class="width_">
+                  <mat-label>Memo</mat-label>
+                  <textarea
+                    matInput
+                    placeholder="Optional"
+                    [(ngModel)]="memo"
+                    formControlName="memoInput"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- end of row -->
+
+            <!-- second row -->
+
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>File Status</mat-label>
+                  <mat-select
+                    [(ngModel)]="fileStatus"
+                    formControlName="secondSelect"
+                    required
+                  >
+                    <mat-option
+                      *ngFor="let item of fileStatusArray"
+                      value="{{ item }}"
+                      >{{ item }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <!-- <div class="col-md-6">
+                <mat-form-field class="width_">
+                  <mat-label>Embassy File No.</mat-label>
+                  <input
+                    matInput
+                    placeholder="Optional"
+                    [(ngModel)]="embassyFileNo"
+                    formControlName="inp"
+                  />
+                </mat-form-field>
+              </div> -->
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Office File No.</mat-label>
+
+                  <input
+                    matInput
+                    placeholder="Required"
+                    [(ngModel)]="officeFileNo"
+                    formControlName="inputOffice"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Govt File No. </mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="EmbassyFileNo1"
+                    formControlName="inputOffice1"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- end of second row -->
+          </div>
+          <!-- end of card body -->
+        </div>
+        <!-- end of card -->
+        <br />
+        <!--  -->
+        <div class="card">
+          <div class="card-header">Client General Information</div>
+
+          <div class="card-body">
+            <div class="row">
+              <!-- <div class="col-md-4">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Select Title</mat-label>
+                  <mat-select
+                    required
+                    [(ngModel)]="generalClientInfoTitle"
+                    formControlName="titleGeneralClient"
+                  >
+                    <mat-option
+                      *ngFor="let item of selectTitle"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+              </div>
+   -->
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>First Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="firstName"
+                    formControlName="name2"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Middle Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="middleName"
+                    formControlName="name22"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="lastName"
+                    formControlName="name2s"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- second row -->
+
+            <div class="row">
+              <!-- <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Case Process Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="caseProcessName"
+                    formControlName="name2q"
+                  />
+                </mat-form-field>
+              </div> -->
+            </div>
+
+            <!-- third row -->
+
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Other Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="otherName"
+                    formControlName="namse2sas"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Gender</mat-label>
+                  <mat-select
+                    [(ngModel)]="whichGender"
+                    formControlName="gende"
+                    required
+                  >
+                    <mat-option
+                      *ngFor="let item of genderArray"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>Date of Birth</mat-label>
+                  <input
+                    matInput
+                    [min]="minDate"
+                    [max]="maxDate"
+                    [matDatepicker]="picker"
+                    [(ngModel)]="clientDOB"
+                    formControlName="clientDOB1"
+                    required
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- fourth row -->
+            <div class="row">
+              <div class="col-md-3">
+                <!-- <form class="example-form"> -->
+                <mat-form-field class="example-full-width">
+                  <mat-label>Email</mat-label>
+                  <input
+                    type="email"
+                    matInput
+                    [formControl]="emailFormControl"
+                    placeholder="Ex. pat@example.com"
+                    required
+                  />
+                  <mat-error
+                    *ngIf="
+                      emailFormControl.hasError('email') &&
+                      !emailFormControl.hasError('required')
+                    "
+                  >
+                    Please enter a valid email address
+                  </mat-error>
+                  <mat-error *ngIf="emailFormControl.hasError('required')">
+                    Email is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-3">
+                <mat-form-field class="width_">
+                  <mat-label>Telephone</mat-label>
+
+                  <input
+                    maxlength="10"
+                    type="tel"
+                    matInput
+                    placeholder="555-555-1234"
+                    [(ngModel)]="phoneNumberClient"
+                    formControlName="phonenumberclientt"
+                    (keypress)="checkPhone()"
+                    required
+                  />
+                  <mat-icon matSuffix>edit</mat-icon>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Select Nationality</mat-label>
+                  <mat-select
+                    [(ngModel)]="whichNational"
+                    formControlName="clientstassa"
+                    required
+                  >
+                    <mat-option
+                      *ngFor="let item of nationalArray"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-3">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Office</mat-label>
+                  <mat-select
+                    [(ngModel)]="whichOffice"
+                    formControlName="clientsta"
+                  >
+                    <mat-option
+                      *ngFor="let item of officeArray"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- end of fourth row -->
+            <!--  -->
+            <div class="row"></div>
+
+            <!-- fourth row end -->
+          </div>
+        </div>
+        <!-- end second card. -->
+
+        <br />
+
+        <div class="card">
+          <div class="card-header">Permanent Address</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Address #1</mat-label>
+                  <textarea
+                    matInput
+                    [(ngModel)]="addressOne"
+                    formControlName="addsre"
+                    required
+                  ></textarea>
+                </mat-form-field>
+              </div>
+
+              <!-- <div class="col-md-4">
+              <mat-form-field class="width_">
+                <mat-label>Address #2</mat-label>
+                <textarea
+                  matInput
+                  [(ngModel)]="addressTwo"
+                  formControlName="memoInputdf"
+                ></textarea>
+              </mat-form-field>
+            </div> -->
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>City</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="city"
+                    formControlName="cihtyl"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Postal Code</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="postalCode"
+                    formControlName="memoInputdf"
+                    maxlength="6"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- second row -->
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Country</mat-label>
+                  <mat-select
+                    [(ngModel)]="whichCountry"
+                    formControlName="cfflientstassa"
+                    required
+                  >
+                    <mat-option
+                      *ngFor="let item of countryArray"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <!-- <mat-form-field appearance="outline" class="width_">
+                  <mat-label>State</mat-label>
+                  <mat-select
+                    [(ngModel)]="whichState"
+                    formControlName="cflientstassa"
+                    required
+                  >
+                    <mat-option *ngFor="let item of stateArray" value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+
+                <mat-form-field class="width_">
+                  <mat-label>Enter State</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="whichState"
+                    formControlName="cflientstassa"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+              <!-- end of coloumn -->
+            </div>
+          </div>
+        </div>
+
+        <!-- end 5th card -->
+
+        <br />
+
+        <!-- -->
+        <!-- start mailing -->
+
+        <div class="card">
+          <div class="card-header">Mailing Address</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Address #1</mat-label>
+                  <textarea
+                    matInput
+                    [(ngModel)]="addressOneMailing"
+                    formControlName="addsrsdae"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+
+              <!-- <div class="col-md-4">
+              <mat-form-field class="width_">
+                <mat-label>Address #2</mat-label>
+                <textarea
+                  [attr.disabled]="isMailingAddressSameBoolean"
+                  matInput
+                  [(ngModel)]="addressTwoMailing"
+                  formControlName="memofInputdf"
+                ></textarea>
+              </mat-form-field>
+            </div> -->
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>City</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="cityMailing"
+                    formControlName="cightyl"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Postal Code</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="postalCodeMailing"
+                    formControlName="memoInpfutdf"
+                    maxlength="6"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- second row -->
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Country</mat-label>
+                  <mat-select
+                    [(ngModel)]="countryMailing"
+                    formControlName="cfflientgstassa"
+                  >
+                    <mat-option
+                      *ngFor="let item of countryArray"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <!-- <mat-form-field appearance="outline" class="width_">
+                  <mat-label>State</mat-label>
+                  <mat-select
+                    [(ngModel)]="stateMailing"
+                    formControlName="cfliefntstassa"
+                  >
+                    <mat-option *ngFor="let item of stateArray" value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+
+                <mat-form-field class="width_">
+                  <mat-label>City</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="stateMailing"
+                    formControlName="cfliefntstassa"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- end mailing -->
+
+        <!-- end contact -->
+
+        <br />
+
+        <!--  -->
+        <div class="card">
+          <div class="card-header">Other Info</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Occupation</mat-label>
+                  <mat-select
+                    [(ngModel)]="occupation"
+                    formControlName="fcfflientgstassa"
+                    required
+                  >
+                    <mat-option
+                      *ngFor="let item of occupationArray"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Education</mat-label>
+                  <mat-select
+                    [(ngModel)]="education"
+                    required
+                    formControlName="cfflientgstassfa"
+                  >
+                    <mat-option
+                      *ngFor="let item of educationArray"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Marital Status</mat-label>
+                  <mat-select
+                    required
+                    (selectionChange)="checkMaritalStatus($event)"
+                    [(ngModel)]="maritalStatus"
+                    formControlName="cfflientgdsfstassdfa"
+                  >
+                    <mat-option
+                      *ngFor="let item of maritalArray"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end  -->
+
+        <!-- if married -->
+
+        <br />
+        <div class="card">
+          <div class="card-header">Spouse Details</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Select Title</mat-label>
+                  <mat-select
+                    [(ngModel)]="spouseTitle"
+                    formControlName="dj"
+                    required
+                  >
+                    <mat-option
+                      *ngFor="let item of selectTitle"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>First Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="spouseFirstName"
+                    formControlName="nasdame2"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Middle Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="spouseMiddleName"
+                    formControlName="namdfse2"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- second row -->
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="spouseLastName"
+                    formControlName="namdfsesadf2"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>Date of Birth</mat-label>
+                  <input
+                    [(ngModel)]="spousedateOfBirth"
+                    formControlName="spousedateofbirthd_"
+                    matInput
+                    [min]="minDate"
+                    [max]="maxDate"
+                    [matDatepicker]="spousePicker"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="spousePicker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #spousePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" class="width_">
+                  <mat-label>Education</mat-label>
+                  <mat-select
+                    [(ngModel)]="spouseEducation"
+                    formControlName="cfflientgstassfa_"
+                  >
+                    <mat-option
+                      *ngFor="let item of educationArray"
+                      value="{{ item }}"
+                      >{{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br />
+        <div class="card">
+          <div class="card-header">Sponsor Details</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3">
+                <mat-form-field class="width_">
+                  <mat-label>First Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="sponsorFirstName"
+                    formControlName="nasdfsame2"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-3">
+                <mat-form-field class="width_">
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="sponsorLastName"
+                    formControlName="nasddsame2"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-3">
+                <mat-form-field class="width_">
+                  <mat-label>Address</mat-label>
+                  <textarea
+                    matInput
+                    [(ngModel)]="sponsorAddress"
+                    formControlName="adddasre"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-3">
+                <mat-form-field class="width_">
+                  <mat-label>Telephone</mat-label>
+                  <!-- <span matPrefix>+1 &nbsp;</span> -->
+                  <input
+                    maxlength="10"
+                    type="tel"
+                    matInput
+                    placeholder="555-555-1234"
+                    [(ngModel)]="sponsorPhone"
+                    (keypress)="checkPhone()"
+                    formControlName="sdlfkjsa"
+                  />
+                  <mat-icon matSuffix>edit</mat-icon>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br />
+        <!-- <div class="card">
+          <div class="card-header">Sponsor Spouse's Details</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>First Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="sponsorSpouseFirstName"
+                    formControlName="nasdfssdfame2"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="sponsorSpouseLastName"
+                    formControlName="nasddsdfame2"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field class="width_">
+                  <mat-label>Address</mat-label>
+                  <textarea
+                    matInput
+                    [(ngModel)]="sponsorSpouseAddress"
+                    formControlName="adddfasadsre"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="width_">
+                  <mat-label>Telephone</mat-label>
+                  <span matPrefix>+1 &nbsp;</span>
+                  <input
+                    type="tel"
+                    maxlength="10"
+                    matInput
+                    placeholder="555-555-1234"
+                    (keypress)="checkPhone()"
+                    [(ngModel)]="sponsorSpousePhone"
+                    formControlName="sdlfkjsasaf"
+                  />
+                  <mat-icon matSuffix>edit</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>Date of Birth</mat-label>
+                  <input
+                    matInput
+                    [min]="minDate"
+                    [max]="maxDate"
+                    [matDatepicker]="sponsorSpouseDate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="sponsorSpouseDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #sponsorSpouseDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </form>
+
+      <!-- ending modal data for all the data -->
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="modal.close('Save click')"
+      >
+        Close
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">
+    Launch demo modal
+  </button> -->
+
+  <!-- <hr /> -->
+
+  <!-- end -->
+</div>

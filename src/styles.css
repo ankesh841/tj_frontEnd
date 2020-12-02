@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.width_ {
+  width: 100%;
+}
+
+.card {
+  box-shadow: 3px 0 6px rgba(0, 0, 0, 0.24);
+}
+
+.shadow {
+  box-shadow: 3px 0 6px rgba(0, 0, 0, 0.24);
+}
+
+.ng-leave {
+  display: none;
+}
+
+.iconDefaultDimensions {
+  height: 80px;
+  width: 80px;
+}

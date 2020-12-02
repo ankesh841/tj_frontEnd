@@ -1,0 +1,55 @@
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+.modal-content {
+  margin: 2px auto;
+  z-index: 1100 !important;
+}
+
+.modal-dialog {
+  /* max-width: 600px !important; */
+  width: 800px !important;
+}
+#displayingClientID .card-header {
+  background-color: #343a40 !important;
+  color: white;
+}
+
+.cdk-overlay-container {
+  position: fixed;
+  z-index: 10000;
+}
+.cdk-overlay-pane {
+  z-index: 10000 !important;
+}
+/* * {
+  z-index: 10000;
+} */
+.image-upload > input {
+  display: none;
+}
+
+#file-input {
+  display: none;
+}
+
+.col-md-3 p {
+  width: 100%;
+}
